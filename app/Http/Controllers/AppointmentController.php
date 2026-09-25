@@ -10,6 +10,7 @@ use Illuminate\Http\JsonResponse;
 use Illuminate\Validation\ValidationException;
 use Illuminate\View\View;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Carbon;
 
 class AppointmentController extends Controller
 {
@@ -203,6 +204,27 @@ class AppointmentController extends Controller
         return redirect()
             ->route('appointments.index')
             ->with('success', 'تم حذف الموعد بنجاح!');
+    }
+
+    public function cancel(Appointment $appointment): RedirectResponse
+    {
+        abort_unless(auth()->user()->hasRole('patient'), 403);
+        $this->authorizeAppointmentAccess($appointment);
+
+        $appointmentAt = $appointment->appointment_date
+            ?? Carbon::parse(($appointment->date?->toDateString() ?? $appointment->date) . ' ' . ($appointment->time ?? '00:00'));
+
+        if ($appointment->status === 'cancelled') {
+            return back()->with('error', 'هذا الموعد ملغي بالفعل.');
+        }
+
+        if ($appointmentAt->lessThanOrEqualTo(now()->addHours(24))) {
+            return back()->with('error', 'يمكن إلغاء الموعد قبل 24 ساعة على الأقل من موعده.');
+        }
+
+        $appointment->update(['status' => 'cancelled']);
+
+        return back()->with('success', 'تم إلغاء الموعد بنجاح.');
     }
 
     public function apiIndex(Request $request): JsonResponse

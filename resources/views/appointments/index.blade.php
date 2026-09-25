@@ -24,6 +24,11 @@
                 {{ session('success') }}
             </div>
         @endif
+        @if(session('error'))
+            <div class="mb-5 rounded-xl border border-red-200 bg-red-50 px-5 py-3 text-red-700">
+                {{ session('error') }}
+            </div>
+        @endif
 
         <div id="appointments-root" class="card mt-6 overflow-hidden">
             @if($appointments->isEmpty())
@@ -78,6 +83,12 @@
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="inline-flex min-h-10 items-center justify-center rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-600 hover:bg-red-100">حذف</button>
+                                            </form>
+                                        @endif
+                                        @if(!$isStaff && $appointment->status !== 'cancelled' && ($appointment->appointment_date ?? \Illuminate\Support\Carbon::parse(($appointment->date?->toDateString() ?? $appointment->date).' '.($appointment->time ?? '00:00')))->isAfter(now()->addHours(24)))
+                                            <form method="POST" action="{{ route('appointments.cancel', $appointment) }}" class="inline-flex" onsubmit="return confirm('هل أنت متأكد من إلغاء هذا الموعد؟')">
+                                                @csrf
+                                                <button type="submit" class="inline-flex min-h-10 items-center justify-center rounded-lg bg-red-50 px-3 py-2 text-sm font-bold text-red-600 hover:bg-red-100">إلغاء الحجز</button>
                                             </form>
                                         @endif
                                         </div>

@@ -167,4 +167,8 @@ Route::middleware(['auth', 'role:admin|doctor|nurse|receptionist'])->prefix('app
     Route::delete('/{appointment}', [AppointmentController::class, 'destroy'])->name('destroy');
 });
 
+Route::middleware(['auth', 'role:patient'])->prefix('appointments')->name('appointments.')->group(function () {
+    Route::post('/{appointment}/cancel', [AppointmentController::class, 'cancel'])->name('cancel');
+});
+
 require __DIR__.'/auth.php';
