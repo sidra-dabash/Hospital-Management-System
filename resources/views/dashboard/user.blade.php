@@ -376,16 +376,7 @@
 
             </div>
 
-            <a href="{{ route('profile.edit') }}"
-               class="px-6 py-3 rounded-xl
-                      bg-secondary-600 text-white
-                      text-sm font-bold
-                      hover:bg-secondary-700 transition">
-
-                الدخول إلى حسابي ←
-
-            </a>
-
+            
         </div>
 
     </section>
