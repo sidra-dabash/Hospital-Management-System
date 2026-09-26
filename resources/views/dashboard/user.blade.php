@@ -1,22 +1,109 @@
 <x-app-layout>
 
+    <style>
+        .doctor-hero {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            background: linear-gradient(110deg, #eef8ff 0%, #ffffff 48%, #f0faf5 100%);
+        }
+
+        .doctor-hero-inner {
+            min-height: 310px;
+            display: grid;
+            width: min(1280px, calc(100% - 48px));
+            margin: 0 auto;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            align-items: center;
+            gap: 28px;
+            padding: 48px 0;
+            direction: ltr;
+        }
+
+        .doctor-hero-content {
+            text-align: right;
+            order: 2;
+            direction: rtl;
+        }
+
+        .doctor-hero-title {
+            margin: 16px 0 0;
+            color: #123b63;
+            font-size: 42px;
+            line-height: 1.25;
+            font-weight: 900;
+        }
+
+        .doctor-hero-image-wrap {
+            position: relative;
+            min-height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            order: 1;
+        }
+
+        .doctor-hero-image {
+            display: block;
+            width: 100%;
+            max-width: 560px;
+            max-height: 360px;
+            object-fit: contain;
+            object-position: left center;
+        }
+
+        @media (max-width: 1100px) {
+            .doctor-hero-inner {
+                width: min(calc(100% - 32px), 900px);
+                grid-template-columns: 1fr;
+            }
+
+            .doctor-hero-content {
+                order: 1;
+            }
+
+            .doctor-hero-image-wrap {
+                justify-content: center;
+                order: 2;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .doctor-hero-inner {
+                width: calc(100% - 24px);
+                min-height: auto;
+                gap: 24px;
+                padding: 26px 20px;
+            }
+
+            .doctor-hero-title {
+                font-size: 32px;
+            }
+
+            .doctor-hero-image-wrap {
+                min-height: 180px;
+            }
+
+            .doctor-hero-image {
+                max-height: 260px;
+                object-position: center;
+            }
+        }
+    </style>
+
     {{-- ================= HERO ================= --}}
-    <section class="relative overflow-hidden bg-cover bg-center"
-             style="background-image: url('{{ asset('images/nav.png') }}');">
+    <section class="doctor-hero">
 
-        <div class="absolute inset-0 bg-white/80"></div>
+        <div class="doctor-hero-inner">
 
-        <div class="relative max-w-7xl mx-auto px-6 pt-24 pb-40 sm:pt-28 sm:pb-44">
+            <div class="doctor-hero-content">
 
-            <div class="max-w-2xl mr-auto text-right">
-
-                <div style="margin-top: 40px; margin-bottom: 40px;">
+                <div>
                     <p class="text-secondary-600 font-bold text-base mb-3">
                         أهلاً بك في Vivio
                     </p>
 
-                    <h1 class="text-4xl sm:text-5xl font-black
-                               leading-tight text-primary-950">
+                    <h1 class="doctor-hero-title">
 
                         صحتك أولويتنا
                         <span class="block text-secondary-600 mt-2">
@@ -26,7 +113,7 @@
                     </h1>
 
                     <p class="text-primary-800 text-base sm:text-lg
-                              leading-8 mt-5">
+                              leading-8 mt-7">
 
                         منصة صحية تساعدك على الوصول إلى خدمات المشفى
                         ومتابعة رحلتك العلاجية بسهولة وأمان.
@@ -34,6 +121,15 @@
                     </p>
                 </div>
 
+            </div>
+
+            <div class="doctor-hero-image-wrap">
+                <img
+                    src="{{ asset('images/image-transparent.png') }}"
+                    alt="لوحة متابعة الرعاية الصحية والطبية"
+                    class="doctor-hero-image"
+                    loading="lazy"
+                >
             </div>
 
         </div>
@@ -70,13 +166,11 @@
 
 
             {{-- Patients --}}
-            <a href="{{ route('patients.index') }}"
-                      class="group h-full bg-white rounded-2xl
+            <div
+                      class="h-full bg-white rounded-2xl
                       border border-neutral-100
                       p-6 text-center
-                      shadow-sm hover:shadow-md
-                      hover:-translate-y-1
-                      transition-all duration-200">
+                      shadow-sm">
 
                 <div class="w-14 h-14 mx-auto rounded-2xl
                             bg-primary-50
@@ -103,25 +197,23 @@
 
                 </p>
 
-                <span class="inline-block
+                <a href="{{ route('patients.index') }}" class="inline-block
                              text-secondary-600
                              text-sm font-bold mt-4">
 
                     عرض المرضى ←
 
-                </span>
+                </a>
 
-            </a>
+            </div>
 
 
             {{-- Appointments --}}
-                <a href="{{ route('appointments.index') }}"
-                    class="group h-full bg-white rounded-2xl
+                <div
+                    class="h-full bg-white rounded-2xl
                              border border-neutral-100
                              p-6 text-center
-                             shadow-sm hover:shadow-md
-                             hover:-translate-y-1
-                             transition-all duration-200">
+                             shadow-sm">
 
                 <div class="w-14 h-14 mx-auto rounded-2xl
                             bg-secondary-50
@@ -148,25 +240,23 @@
 
                 </p>
 
-                <span class="inline-block
+                <a href="{{ route('appointments.index') }}" class="inline-block
                              text-secondary-600
                              text-sm font-bold mt-4">
 
                     عرض المواعيد ←
 
-                </span>
+                </a>
 
-            </a>
+            </div>
 
 
                 {{-- Personal Profile --}}
-                <a href="{{ route('profile.edit') }}"
-                    class="group h-full bg-white rounded-2xl
+                <div
+                    class="h-full bg-white rounded-2xl
                              border border-neutral-100
                              p-6 text-center
-                             shadow-sm hover:shadow-md
-                             hover:-translate-y-1
-                             transition-all duration-200">
+                             shadow-sm">
 
                 <div class="w-14 h-14 mx-auto rounded-2xl
                             bg-primary-50
@@ -193,13 +283,13 @@
 
                 </p>
 
-                <span class="inline-block text-secondary-600 text-sm font-bold mt-4">
+                <a href="{{ route('profile.edit') }}" class="inline-block text-secondary-600 text-sm font-bold mt-4">
 
                     عرض الملف الشخصي ←
 
-                </span>
+                </a>
 
-            </a>
+            </div>
 
         </div>
 

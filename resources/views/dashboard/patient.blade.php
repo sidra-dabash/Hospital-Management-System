@@ -1,21 +1,108 @@
 <x-app-layout>
 
+    <style>
+        .patient-hero {
+            position: relative;
+            overflow: hidden;
+            width: 100%;
+            background: linear-gradient(110deg, #eef8ff 0%, #ffffff 48%, #f0faf5 100%);
+        }
+
+        .patient-hero-inner {
+            min-height: 310px;
+            display: grid;
+            width: min(1280px, calc(100% - 48px));
+            margin: 0 auto;
+            grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+            align-items: center;
+            gap: 28px;
+            padding: 48px 0;
+            direction: ltr;
+        }
+
+        .patient-hero-content {
+            text-align: right;
+            order: 2;
+            direction: rtl;
+        }
+
+        .patient-hero-title {
+            margin: 16px 0 0;
+            color: #123b63;
+            font-size: 42px;
+            line-height: 1.25;
+            font-weight: 900;
+        }
+
+        .patient-hero-image-wrap {
+            position: relative;
+            min-height: 320px;
+            display: flex;
+            align-items: center;
+            justify-content: flex-start;
+            order: 1;
+        }
+
+        .patient-hero-image {
+            display: block;
+            width: 100%;
+            max-width: 560px;
+            max-height: 360px;
+            object-fit: contain;
+            object-position: left center;
+        }
+
+        @media (max-width: 1100px) {
+            .patient-hero-inner {
+                width: min(calc(100% - 32px), 900px);
+                grid-template-columns: 1fr;
+            }
+
+            .patient-hero-content {
+                order: 1;
+            }
+
+            .patient-hero-image-wrap {
+                justify-content: center;
+                order: 2;
+            }
+        }
+
+        @media (max-width: 760px) {
+            .patient-hero-inner {
+                width: calc(100% - 24px);
+                min-height: auto;
+                gap: 24px;
+                padding: 26px 20px;
+            }
+
+            .patient-hero-title {
+                font-size: 32px;
+            }
+
+            .patient-hero-image-wrap {
+                min-height: 180px;
+            }
+
+            .patient-hero-image {
+                max-height: 260px;
+                object-position: center;
+            }
+        }
+    </style>
+
     {{-- ================= HERO ================= --}}
-    <section class="relative overflow-hidden bg-cover bg-center"
-             style="background-image: url('{{ asset('images/nav.png') }}');">
+    <section class="patient-hero">
 
-        <div class="absolute inset-0 bg-white/85"></div>
+        <div class="patient-hero-inner">
 
-        <div class="relative max-w-7xl mx-auto px-6 pt-24 pb-8 sm:pt-28 sm:pb-10">
-
-            <div class="max-w-2xl mr-auto text-right">
-                <div style="transform: translateY(60px); margin-bottom: 90px;">
+            <div class="patient-hero-content">
+                <div>
                     <p class="text-secondary-600 font-bold text-base mb-3">
                         أهلاً بك يا {{ auth()->user()->name ?? 'مريضنا الكريم' }}
                     </p>
 
-                    <h1 class="text-4xl sm:text-5xl font-black
-                               leading-tight text-primary-950">
+                    <h1 class="patient-hero-title">
 
                         صحتك أولويتنا
                         <span class="block text-secondary-600 mt-2">
@@ -33,6 +120,15 @@
                     </p>
                 </div>
 
+            </div>
+
+            <div class="patient-hero-image-wrap">
+                <img
+                    src="{{ asset('images/image-transparent.png') }}"
+                    alt="لوحة متابعة الرعاية الصحية والطبية"
+                    class="patient-hero-image"
+                    loading="lazy"
+                >
             </div>
 
         </div>
