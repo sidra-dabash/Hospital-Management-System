@@ -11,6 +11,8 @@ use App\Models\Department;
 use App\Models\Doctor;
 use App\Models\Patient;
 use App\Models\Appointment;
+use App\Models\MedicalRecord;
+use Illuminate\Support\Facades\DB;
 
 Route::get('/', function () {
     return auth()->check()
@@ -22,11 +24,79 @@ Route::get('/dashboard', function () {
     $user = auth()->user();
 
     if ($user->hasRole('admin')) {
+        $weekStart = now()->startOfDay()->subDays(6);
+        $dailyActivityCounts = collect(range(0, 6))
+            ->mapWithKeys(fn ($day) => [$weekStart->copy()->addDays($day)->toDateString() => 0]);
+
+        foreach (['patients', 'doctors', 'appointments', 'medical_records'] as $table) {
+            DB::table($table)
+                ->selectRaw('DATE(created_at) as activity_date, COUNT(*) as total')
+                ->whereBetween('created_at', [$weekStart, now()])
+                ->groupBy('activity_date')
+                ->get()
+                ->each(function ($row) use ($dailyActivityCounts) {
+                    $date = (string) $row->activity_date;
+                    $dailyActivityCounts->put($date, ($dailyActivityCounts->get($date, 0)) + (int) $row->total);
+                });
+        }
+
+        $dayNames = ['الأحد', 'الإثنين', 'الثلاثاء', 'الأربعاء', 'الخميس', 'الجمعة', 'السبت'];
+        $dailyActivities = $dailyActivityCounts->map(fn ($total, $date) => [
+            'date' => $date,
+            'label' => $dayNames[now()->parse($date)->dayOfWeek],
+            'total' => $total,
+        ])->values();
+
+        $chartXPositions = [45, 160, 265, 365, 475, 590, 740];
+        $chartMax = max(1, $dailyActivities->max('total'));
+        $chartCoordinates = $dailyActivities->map(fn ($activity, $index) => [
+            'x' => $chartXPositions[$index],
+            'y' => 235 - (int) round(($activity['total'] / $chartMax) * 180),
+            'total' => $activity['total'],
+        ]);
+        $chartPoints = $chartCoordinates->map(fn ($point) => $point['x'].','.$point['y'])->implode(' ');
+        $chartAreaPoints = $chartPoints.' 740,235 45,235';
+
+        $activities = collect()
+            ->concat(Patient::query()->latest()->limit(10)->get()->map(fn ($patient) => [
+                'title' => 'تم تسجيل مريض جديد',
+                'subtitle' => $patient->full_name,
+                'time' => $patient->created_at,
+                'type' => 'patient',
+            ]))
+            ->concat(Doctor::query()->with('user')->latest()->limit(10)->get()->map(fn ($doctor) => [
+                'title' => 'تمت إضافة طبيب جديد',
+                'subtitle' => $doctor->user?->name ?? $doctor->specialization,
+                'time' => $doctor->created_at,
+                'type' => 'doctor',
+            ]))
+            ->concat(Appointment::query()->with('patient')->latest()->limit(10)->get()->map(fn ($appointment) => [
+                'title' => 'تم حجز موعد جديد',
+                'subtitle' => $appointment->patient?->full_name ?? 'موعد',
+                'time' => $appointment->created_at,
+                'type' => 'appointment',
+            ]))
+            ->concat(MedicalRecord::query()->with('patient')->latest()->limit(10)->get()->map(fn ($record) => [
+                'title' => 'تمت إضافة سجل طبي',
+                'subtitle' => $record->patient?->full_name ?? 'سجل طبي',
+                'time' => $record->created_at,
+                'type' => 'report',
+            ]))
+            ->sortByDesc('time')
+            ->take(4)
+            ->values();
+
         return view('dashboard.admin', [
             'patientCount' => Patient::count(),
             'doctorCount' => Doctor::count(),
             'departmentCount' => Department::count(),
             'appointmentCount' => Appointment::count(),
+            'activities' => $activities,
+            'dailyActivities' => $dailyActivities,
+            'chartPoints' => $chartPoints,
+            'chartAreaPoints' => $chartAreaPoints,
+            'chartCoordinates' => $chartCoordinates,
+            'chartXPositions' => $chartXPositions,
         ]);
     }
 

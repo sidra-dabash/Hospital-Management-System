@@ -911,11 +911,11 @@
                             </div>
 
                             <div class="vivio-panel-title">
-                                إحصائيات اليوم
+                                النشاط خلال آخر 7 أيام
                             </div>
 
                             <div class="vivio-panel-subtitle">
-                                مؤشرات مباشرة مبنية على بيانات النظام الحالية
+                                إجمالي السجلات والمواعيد التي أُضيفت في كل يوم
                             </div>
 
                         </div>
@@ -998,35 +998,16 @@
 
                             {{-- AREA --}}
 
-                            <path
-                                d="
-                                    M45 205
-                                    C95 180 120 170 160 175
-                                    S220 135 265 145
-                                    S325 105 365 130
-                                    S430 55 475 70
-                                    S545 135 590 115
-                                    S675 95 740 120
-                                    L740 235
-                                    L45 235
-                                    Z
-                                "
+                            <polygon
+                                points="{{ $chartAreaPoints }}"
                                 fill="url(#vivioChartGradient)"
                             />
 
 
                             {{-- LINE --}}
 
-                            <path
-                                d="
-                                    M45 205
-                                    C95 180 120 170 160 175
-                                    S220 135 265 145
-                                    S325 105 365 130
-                                    S430 55 475 70
-                                    S545 135 590 115
-                                    S675 95 740 120
-                                "
+                            <polyline
+                                points="{{ $chartPoints }}"
                                 fill="none"
                                 stroke="#2878d8"
                                 stroke-width="4"
@@ -1036,19 +1017,13 @@
 
                             {{-- POINTS --}}
 
-                            <g
-                                fill="#2878d8"
-                                stroke="white"
-                                stroke-width="3">
-
-                                <circle cx="45" cy="205" r="6"/>
-                                <circle cx="160" cy="175" r="6"/>
-                                <circle cx="265" cy="145" r="6"/>
-                                <circle cx="365" cy="130" r="6"/>
-                                <circle cx="475" cy="70" r="6"/>
-                                <circle cx="590" cy="115" r="6"/>
-                                <circle cx="740" cy="120" r="6"/>
-
+                            <g fill="#2878d8" stroke="white" stroke-width="3">
+                                @foreach($chartCoordinates as $point)
+                                    <circle cx="{{ $point['x'] }}" cy="{{ $point['y'] }}" r="6"/>
+                                    <text x="{{ $point['x'] }}" y="{{ max(16, $point['y'] - 12) }}" text-anchor="middle" fill="#294465" stroke="none" font-size="12">
+                                        {{ $point['total'] }}
+                                    </text>
+                                @endforeach
                             </g>
 
 
@@ -1059,54 +1034,11 @@
                                 font-size="14"
                                 font-family="Cairo, sans-serif">
 
-                                <text
-                                    x="45"
-                                    y="268"
-                                    text-anchor="middle">
-                                    السبت
-                                </text>
-
-                                <text
-                                    x="160"
-                                    y="268"
-                                    text-anchor="middle">
-                                    الأحد
-                                </text>
-
-                                <text
-                                    x="265"
-                                    y="268"
-                                    text-anchor="middle">
-                                    الإثنين
-                                </text>
-
-                                <text
-                                    x="365"
-                                    y="268"
-                                    text-anchor="middle">
-                                    الثلاثاء
-                                </text>
-
-                                <text
-                                    x="475"
-                                    y="268"
-                                    text-anchor="middle">
-                                    الأربعاء
-                                </text>
-
-                                <text
-                                    x="590"
-                                    y="268"
-                                    text-anchor="middle">
-                                    الخميس
-                                </text>
-
-                                <text
-                                    x="740"
-                                    y="268"
-                                    text-anchor="middle">
-                                    الجمعة
-                                </text>
+                                @foreach($dailyActivities as $index => $activity)
+                                    <text x="{{ $chartXPositions[$index] }}" y="268" text-anchor="middle">
+                                        {{ $activity['label'] }}
+                                    </text>
+                                @endforeach
 
                             </g>
 
@@ -1170,41 +1102,7 @@
                     </div>
 
 
-                    @php
 
-                        $activities = [
-
-                            [
-                                'title' => 'تم تسجيل مريض جديد',
-                                'subtitle' => 'مراجعة عامة',
-                                'time' => '10:24 ص',
-                                'type' => 'patient'
-                            ],
-
-                            [
-                                'title' => 'تمت إضافة طبيب جديد',
-                                'subtitle' => 'أحمد محمد علي',
-                                'time' => '09:15 ص',
-                                'type' => 'doctor'
-                            ],
-
-                            [
-                                'title' => 'تم إصدار تقرير طبي',
-                                'subtitle' => 'تقرير العيادة الداخلية',
-                                'time' => '08:40 ص',
-                                'type' => 'report'
-                            ],
-
-                            [
-                                'title' => 'تم تحديث بيانات المريض',
-                                'subtitle' => 'سارة أحمد',
-                                'time' => '08:12 ص',
-                                'type' => 'update'
-                            ],
-
-                        ];
-
-                    @endphp
 
 
                     <div class="vivio-activities">
@@ -1340,7 +1238,7 @@
                                 {{-- TIME --}}
 
                                 <div class="vivio-activity-time">
-                                    {{ $activity['time'] }}
+                                    {{ $activity['time']->format('Y-m-d H:i') }}
                                 </div>
 
                             </div>
@@ -1348,14 +1246,13 @@
                         @endforeach
 
 
-                        <a
-                            href="{{ route('reports.index') }}"
-                            class="vivio-all-activities">
+                        @if($activities->isEmpty())
+                            <div class="vivio-activity-subtitle" style="padding: 18px 0;">
+                                لا توجد أنشطة مسجلة حتى الآن.
+                            </div>
+                        @endif
 
-                            عرض جميع الأنشطة
-                            <span>←</span>
 
-                        </a>
 
                     </div>
 
