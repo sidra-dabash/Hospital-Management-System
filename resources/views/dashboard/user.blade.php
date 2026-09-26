@@ -106,7 +106,7 @@
                     <h1 class="doctor-hero-title">
 
                         صحتك أولويتنا
-                        <span class="block text-secondary-600 mt-2">
+                        <span class="block mt-2">
                             ورعايتك أسهل معنا
                         </span>
 

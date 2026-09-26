@@ -105,7 +105,7 @@
                     <h1 class="patient-hero-title">
 
                         صحتك أولويتنا
-                        <span class="block text-secondary-600 mt-2">
+                        <span class="block mt-2">
                             ورعايتك أسهل معنا
                         </span>
 
@@ -230,13 +230,11 @@
 
 
             {{-- Book Appointment --}}
-            <a href="{{ route('appointments.create') }}"
-               class="group h-full bg-white rounded-2xl
+            <div
+               class="h-full bg-white rounded-2xl
                       border border-neutral-100
                       p-6 text-center
-                      shadow-sm hover:shadow-md
-                      hover:-translate-y-1
-                      transition-all duration-200">
+                      shadow-sm">
 
                 <div class="w-14 h-14 mx-auto rounded-2xl
                             bg-primary-50
@@ -263,25 +261,23 @@
 
                 </p>
 
-                <span class="inline-block
+                <a href="{{ route('appointments.create') }}" class="inline-block
                              text-primary-700
-                             text-sm font-bold mt-4 group-hover:text-secondary-600 transition">
+                             text-sm font-bold mt-4 hover:text-secondary-600 transition">
 
                     احجز الآن ←
 
-                </span>
+                </a>
 
-            </a>
+            </div>
 
 
             {{-- My Appointments --}}
-            <a href="{{ route('appointments.index') }}"
-               class="group h-full bg-white rounded-2xl
+            <div
+               class="h-full bg-white rounded-2xl
                       border border-neutral-100
                       p-6 text-center
-                      shadow-sm hover:shadow-md
-                      hover:-translate-y-1
-                      transition-all duration-200">
+                      shadow-sm">
 
                 <div class="w-14 h-14 mx-auto rounded-2xl
                             bg-secondary-50
@@ -308,36 +304,23 @@
 
                 </p>
 
-                <span class="inline-block
+                <a href="{{ route('appointments.index') }}" class="inline-block
                              text-secondary-600
                              text-sm font-bold mt-4">
 
                     عرض المواعيد ←
 
-                </span>
+                </a>
 
-            </a>
+            </div>
 
 
             {{-- Medical Record --}}
-            @if(!empty($patientRecordUrl))
-            <a href="{{ $patientRecordUrl }}"
-               id="my-records"
-               class="group h-full bg-white rounded-2xl
+            <div id="my-records"
+               class="h-full bg-white rounded-2xl
                       border border-neutral-100
                       p-6 text-center
-                      shadow-sm hover:shadow-md
-                      hover:-translate-y-1
-                      transition-all duration-200">
-            @else
-            <div id="my-records"
-                   class="group h-full bg-white rounded-2xl
-                        border border-neutral-100
-                        p-6 text-center
-                       shadow-sm hover:shadow-md
-                       hover:-translate-y-1
-                       transition-all duration-200">
-            @endif
+                      shadow-sm">
 
                 <div class="w-14 h-14 mx-auto rounded-2xl
                             bg-emerald-50
@@ -365,13 +348,13 @@
                 </p>
 
                 @if(!empty($patientRecordUrl))
-                <span class="inline-block
+                <a href="{{ $patientRecordUrl }}" class="inline-block
                              text-emerald-600
                              text-sm font-bold mt-4">
 
                     عرض السجل ←
 
-                </span>
+                </a>
                 @else
                 <span class="inline-block
                              text-neutral-400
@@ -382,21 +365,15 @@
                 </span>
                 @endif
 
-            @if(!empty($patientRecordUrl))
-            </a>
-            @else
             </div>
-            @endif
 
 
             {{-- Profile --}}
-            <a href="{{ route('profile.edit') }}"
-               class="group h-full bg-white rounded-2xl
+            <div
+               class="h-full bg-white rounded-2xl
                       border border-neutral-100
                       p-6 text-center
-                      shadow-sm hover:shadow-md
-                      hover:-translate-y-1
-                      transition-all duration-200">
+                      shadow-sm">
 
                 <div class="w-14 h-14 mx-auto rounded-2xl
                             bg-amber-50
@@ -423,15 +400,15 @@
 
                 </p>
 
-                <span class="inline-block
+                <a href="{{ route('profile.edit') }}" class="inline-block
                              text-amber-600
                              text-sm font-bold mt-4">
 
                     تعديل البيانات ←
 
-                </span>
+                </a>
 
-            </a>
+            </div>
 
 
         </div>
