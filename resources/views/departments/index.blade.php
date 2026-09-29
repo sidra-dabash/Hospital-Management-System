@@ -7,7 +7,6 @@
                     <h1 class="text-3xl font-black text-primary-950">الأقسام الطبية</h1>
                     <p class="text-neutral-500 mt-2">تنظيم أقسام المشفى والتخصصات التابعة لها.</p>
                 </div>
-                <a href="#add-department" class="btn-primary">+ إضافة قسم جديد</a>
             </div>
         </div>
     </div>

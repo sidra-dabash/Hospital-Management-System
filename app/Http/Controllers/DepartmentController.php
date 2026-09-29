@@ -42,7 +42,7 @@ class DepartmentController extends Controller
 
     public function destroy(Department $department): RedirectResponse
     {
-        if ($department->doctors()->exists() || $department->rooms()->exists()) {
+        if ($department->doctors()->exists()) {
             return back()->with('error', 'لا يمكن حذف قسم مرتبط بأطباء أو غرف.');
         }
 
