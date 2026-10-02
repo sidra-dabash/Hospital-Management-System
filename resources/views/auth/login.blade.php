@@ -22,8 +22,7 @@
             <x-text-input id="password" class="block mt-1 w-full px-4 py-3 rounded-xl border border-neutral-200 bg-neutral-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition"
                             type="password"
                             name="password"
-                            placeholder="••••••••"
-                            required autocomplete="current-password" />
+                            required autocomplete="off" />
             <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-500 text-sm font-medium" />
         </div>
 

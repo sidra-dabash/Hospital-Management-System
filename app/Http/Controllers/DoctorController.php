@@ -83,6 +83,8 @@ class DoctorController extends Controller
             'phone' => ['nullable', 'string', 'max:30'],
             'salary' => ['nullable', 'numeric', 'min:0'],
             'password' => ['nullable', 'string', 'min:8', 'confirmed'],
+        ], [
+            'email.unique' => 'البريد الإلكتروني مستخدم بالفعل، يرجى إدخال بريد إلكتروني آخر.',
         ]);
 
         DB::transaction(function () use ($data, $doctor) {
@@ -118,6 +120,8 @@ class DoctorController extends Controller
             'phone' => ['nullable', 'string', 'max:30'],
             'salary' => ['nullable', 'numeric', 'min:0'],
             'password' => ['required', 'string', 'min:8', 'confirmed'],
+        ], [
+            'email.unique' => 'البريد الإلكتروني مستخدم بالفعل، يرجى إدخال بريد إلكتروني آخر.',
         ]);
     }
 }

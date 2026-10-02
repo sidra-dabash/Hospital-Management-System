@@ -49,14 +49,14 @@
             <div>
                 <x-input-label for="password" class="font-bold text-neutral-700 mb-2 block" :value="__('كلمة المرور')" />
                 <x-text-input id="password" class="block mt-1 w-full px-4 py-3 rounded-xl border border-neutral-200 bg-neutral-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition"
-                              type="password" name="password" placeholder="••••••••" required autocomplete="new-password" />
+                              type="password" name="password" required autocomplete="new-password" />
                 <x-input-error :messages="$errors->get('password')" class="mt-2 text-red-500 text-sm font-medium" />
             </div>
 
             <div>
                 <x-input-label for="password_confirmation" class="font-bold text-neutral-700 mb-2 block" :value="__('تأكيد كلمة المرور')" />
                 <x-text-input id="password_confirmation" class="block mt-1 w-full px-4 py-3 rounded-xl border border-neutral-200 bg-neutral-50 focus:bg-white focus:border-primary-400 focus:ring-2 focus:ring-primary-100 outline-none transition"
-                              type="password" name="password_confirmation" placeholder="••••••••" required autocomplete="new-password" />
+                              type="password" name="password_confirmation" required autocomplete="new-password" />
                 <x-input-error :messages="$errors->get('password_confirmation')" class="mt-2 text-red-500 text-sm font-medium" />
             </div>
         </div>
