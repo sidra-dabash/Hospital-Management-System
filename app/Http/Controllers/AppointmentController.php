@@ -107,13 +107,11 @@ class AppointmentController extends Controller
         $defaultDoctorName = null;
         $defaultSpecialty = null;
         $defaultDoctorId = null;
-        $availableDoctors = auth()->user()->hasRole('patient')
-            ? Doctor::with('user')->orderBy('id')->get()->map(fn (Doctor $doctor) => [
+        $availableDoctors = Doctor::with('user')->orderBy('id')->get()->map(fn (Doctor $doctor) => [
                 'id' => $doctor->id,
                 'name' => $doctor->user?->name ?? ('طبيب #' . $doctor->id),
                 'specialty' => $doctor->specialization,
-            ])->values()
-            : collect();
+            ])->values();
 
         if (!$isStaff) {
             $defaultPatientName = auth()->user()->name;
@@ -326,7 +324,7 @@ class AppointmentController extends Controller
                 'specialty' => $doctor->specialization,
                 'doctor_id' => $doctor->id,
             ]);
-        } elseif ($user?->hasRole('patient') && $request->filled('doctor_id')) {
+        } elseif ($request->filled('doctor_id')) {
             $doctor = Doctor::with('user')->find($request->input('doctor_id'));
             if ($doctor) {
                 $request->merge([
@@ -378,9 +376,9 @@ class AppointmentController extends Controller
         }
 
         $dateRule = $isUpdate ? 'required|date' : 'required|date|after_or_equal:today';
-        $doctorIdRule = auth()->user()?->hasRole('patient')
-            ? 'required|exists:doctors,id'
-            : 'nullable|exists:doctors,id';
+        $doctorIdRule = $isUpdate
+            ? 'nullable|exists:doctors,id'
+            : 'required|exists:doctors,id';
 
         $validated = $request->validate([
             'patient_name' => 'required|string|max:255',

@@ -68,7 +68,7 @@
                 const newErrors = {};
                 if (!form.patient_name.trim()) newErrors.patient_name = 'اسم المريض مطلوب';
                 if (!form.doctor_name.trim()) newErrors.doctor_name = 'اسم الطبيب مطلوب';
-                if (IS_PATIENT && !form.doctor_id) newErrors.doctor_id = 'يرجى اختيار الطبيب';
+                if (!form.doctor_id) newErrors.doctor_id = 'يرجى اختيار الطبيب';
                 if (!form.date) newErrors.date = 'تاريخ الموعد مطلوب';
                 if (!form.time) newErrors.time = 'وقت الموعد مطلوب';
                 setErrors(newErrors);
@@ -85,7 +85,7 @@
                 const payload = {
                     patient_name: form.patient_name,
                     doctor_name: form.doctor_name,
-                    specialty: IS_DOCTOR ? DEFAULT_SPECIALTY : (IS_PATIENT ? form.specialty : (form.specialty || form.appointment_type)),
+                    specialty: form.specialty,
                     doctor_id: form.doctor_id || null,
                     date: form.date,
                     time: form.time,
@@ -157,42 +157,20 @@
 
                             <div>
                                 <label className="block text-sm font-bold text-primary-900 mb-2">الطبيب <span className="text-red-500">*</span></label>
-                                {IS_PATIENT ? (
-                                    <select name="doctor_id" value={form.doctor_id} onChange={handleChange} className={`select-field ${errors.doctor_id ? 'border-red-500 bg-red-50' : ''}`} required>
-                                        <option value="">اختر الطبيب</option>
-                                        {AVAILABLE_DOCTORS.map(doctor => <option key={doctor.id} value={doctor.id}>{doctor.name}</option>)}
-                                    </select>
-                                ) : <input
-                                    type="text"
-                                    name="doctor_name"
-                                    value={form.doctor_name}
-                                    onChange={handleChange}
-                                    placeholder="اسم الطبيب"
-                                    className={`input-field ${errors.doctor_name ? 'border-red-500 bg-red-50' : ''}`}
-                                    readOnly={IS_DOCTOR}
-                                    style={IS_DOCTOR ? {background:'#f5f5f5',cursor:'not-allowed'} : {}}
-                                />}
+                                <select name="doctor_id" value={form.doctor_id} onChange={handleChange} className={`select-field ${errors.doctor_id ? 'border-red-500 bg-red-50' : ''}`} disabled={IS_DOCTOR} required>
+                                    {!form.doctor_id && <option value="">اختر الطبيب</option>}
+                                    {AVAILABLE_DOCTORS.map(doctor => <option key={doctor.id} value={doctor.id}>{doctor.name}</option>)}
+                                </select>
                                 {errors.doctor_name && <div className="mt-1 text-sm text-red-600">{errors.doctor_name}</div>}
                                 {errors.doctor_id && <div className="mt-1 text-sm text-red-600">{errors.doctor_id}</div>}
                             </div>
 
                             <div>
                                 <label className="block text-sm font-bold text-primary-900 mb-2">التخصص الطبي</label>
-                                {IS_PATIENT ? (
-                                    <select name="specialty" value={form.specialty} onChange={handleChange} className="select-field" disabled={!form.doctor_id}>
-                                        {!form.doctor_id && <option value="">اختر الطبيب أولاً</option>}
-                                        {form.doctor_id && <option value={form.specialty}>{form.specialty || 'لا يوجد تخصص مسجل'}</option>}
-                                    </select>
-                                ) : <input
-                                    type="text"
-                                    name="specialty"
-                                    value={form.specialty}
-                                    onChange={handleChange}
-                                    placeholder="مثال: الباطنية، الأطفال، الجراحة..."
-                                    className="input-field"
-                                    readOnly={IS_DOCTOR}
-                                    style={IS_DOCTOR ? {background:'#f5f5f5',cursor:'not-allowed'} : {}}
-                                />}
+                                <select name="specialty" value={form.specialty} onChange={handleChange} className="select-field" disabled={!form.doctor_id}>
+                                    {!form.doctor_id && <option value="">اختر الطبيب أولاً</option>}
+                                    {form.doctor_id && <option value={form.specialty}>{form.specialty || 'لا يوجد تخصص مسجل'}</option>}
+                                </select>
                             </div>
 
                             <div className="grid grid-cols-1 sm:grid-cols-2 gap-5">
