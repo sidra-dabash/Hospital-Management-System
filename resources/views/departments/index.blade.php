@@ -33,7 +33,7 @@
                         <article class="card overflow-hidden group">
                             <div class="h-2 bg-gradient-to-l from-primary-600 to-secondary-500"></div>
                             <div class="p-5">
-                                <div class="flex items-start justify-between gap-3"><div class="w-14 h-14 rounded-2xl bg-primary-50 text-primary-700 flex items-center justify-center text-2xl font-black">✚</div><span class="badge badge-info">#{{ str_pad($department->id, 2, '0', STR_PAD_LEFT) }}</span></div>
+                                <div class="flex items-start justify-between gap-3"><div class="w-14 h-14 rounded-2xl bg-primary-50 text-primary-700 flex items-center justify-center text-2xl font-black">✚</div></div>
                                 <h3 class="text-lg font-black text-primary-950 mt-5">{{ $department->name }}</h3>
                                 <p class="text-sm text-neutral-500 leading-relaxed mt-2 min-h-[42px]">{{ $department->description ?: 'قسم طبي متخصص ضمن منظومة المشفى.' }}</p>
                                 <div class="flex items-center justify-between mt-5 pt-4 border-t border-neutral-100"><span class="text-sm text-neutral-600"><strong class="text-primary-700">{{ $department->doctors_count }}</strong> أطباء</span><span class="text-xs text-secondary-700 bg-secondary-50 px-3 py-1 rounded-full">نشط</span></div>

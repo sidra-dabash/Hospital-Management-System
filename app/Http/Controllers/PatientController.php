@@ -262,7 +262,7 @@ class PatientController extends Controller
         $this->authorizePatientAccess($patient);
         $patientUsers = User::role('patient')
             ->where(function ($query) use ($patient) {
-                $query->whereDoesntHave('patient')->orWhereKey($patient->user_id ?? 0);
+                $query->whereDoesntHave('patient')->orWhere('id', $patient->user_id ?? 0);
             })
             ->orderBy('name')
             ->get();
