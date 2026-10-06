@@ -4,7 +4,7 @@
             <div class="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
                 <div>
                     <a href="{{ route('appointments.index') }}" class="text-primary-600 font-bold text-sm">← العودة إلى قائمة المواعيد</a>
-                    <h1 class="text-3xl font-black text-primary-950 mt-4">تعديل الموعد #{{ $appointment->id }}</h1>
+                    <h1 class="text-3xl font-black text-primary-950 mt-4">تعديل الموعد</h1>
                     <p class="text-neutral-500 mt-2">قم بتحديث بيانات الموعد وفقاً للتغييرات المطلوبة.</p>
                 </div>
                 <div class="flex flex-wrap gap-2">
@@ -113,7 +113,7 @@
                             إلغاء
                         </a>
                         <button type="submit" class="btn-primary">
-                            💾 حفظ التعديلات
+                            حفظ التعديلات
                         </button>
                     </div>
                 </form>
